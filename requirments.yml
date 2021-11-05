@@ -1,0 +1,3 @@
+collections:
+  - name: https://github.com/ooraini/kubespray.git
+    type: git

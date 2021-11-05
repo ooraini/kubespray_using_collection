@@ -1,0 +1,26 @@
+- hosts: all
+  tasks:
+    - name: OS update
+      become: yes
+      yum: "name=* state=latest"
+
+    - name: Enable cgroupv2
+      become: yes
+      shell: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=1"
+
+    - name: Enable container-tools:rhel8
+      become: yes
+      shell: yum module enable container-tools:rhel8 -y
+
+    - name: Ensure firewalld is stopped and disabled
+      become: yes
+      systemd:
+        name: firewalld.service
+        state: stopped 
+        enabled: false
+
+    - name: Reboot Server
+      become: yes
+      command: shutdown -r now "Ansible Updates Triggered"
+      async: 30
+      poll: 0
